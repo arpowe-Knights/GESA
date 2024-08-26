@@ -6,7 +6,7 @@
             "id": "a3c411ae-3e97-4e56-852e-0d7e8f00f81b",
             "actions": [
                 {
-                    "name": "fire",
+                    "name": "jump",
                     "type": "Button",
                     "id": "2dd776e6-4e73-4926-91a4-0400bd143572",
                     "expectedControlType": "Button",
@@ -18,10 +18,37 @@
                     "name": "Movement",
                     "type": "Value",
                     "id": "27f9aed9-7049-4c42-94ac-eae6121a00c9",
-                    "expectedControlType": "Vector3",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "a8a41e55-532f-4b7b-a785-1df8cc3bfdce",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "6b3955ca-4cf5-41ca-a4b6-a904678903c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "dash",
+                    "type": "Button",
+                    "id": "d04a8469-744d-4b82-810b-9c4ff99c9219",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -32,14 +59,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "fire",
+                    "action": "jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "3D Vector",
-                    "id": "895a94dc-3771-4b9c-bb74-f1d3834a7511",
-                    "path": "3DVector",
+                    "name": "WASD",
+                    "id": "10b236e8-b80a-41fd-9ac1-ded921145233",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -49,7 +76,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "d4f463d8-f018-4222-9312-d26b2d4d1696",
+                    "id": "74718e16-5876-4209-bbaa-ac1e1c12f8f6",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -60,7 +87,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "c23690d7-fe97-4398-8de8-ad55f4ef4acf",
+                    "id": "c14911e1-fc4d-4ad1-b9b9-f80b0a2b8ffe",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -71,7 +98,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "6c779cf9-577e-4d79-a94e-24e30a74daf4",
+                    "id": "de9b085d-de59-4974-a1ea-664ffaccd98a",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -82,7 +109,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "4ab1b6f1-7ed3-4996-80b9-1583026c4198",
+                    "id": "f7a4673c-c3e3-4ee6-a6c2-92529430bd22",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -92,26 +119,48 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "forward",
-                    "id": "a4368ea7-5188-4056-95f3-66c78f3b34dc",
-                    "path": "",
+                    "name": "",
+                    "id": "2fd98d4e-7e82-4c52-b754-8b80013f2f43",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Movement",
+                    "action": "Look",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 },
                 {
-                    "name": "backward",
-                    "id": "47313a03-2f94-4883-80ff-31ef7213ed22",
-                    "path": "",
+                    "name": "",
+                    "id": "5b161539-97ec-4879-8113-84b21e8dd7f8",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyBoard",
-                    "action": "Movement",
+                    "action": "Sprint",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dedb7596-52b1-41e3-b4de-d571f015aa6e",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard",
+                    "action": "dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b6c0dcc-fca6-4fcb-aa79-0ef20ffda8f9",
+                    "path": "<Mouse>/forwardButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
