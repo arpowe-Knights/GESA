@@ -10,12 +10,17 @@ public class WallRunning : MonoBehaviour
     public float wallJumpForce = 10f;
     public float wallJumpUpwardsForce = 5f;
     public float verticalWallRunSpeed = 5f;
+    public float wallJumpCooldown = .5f;
+    public PlayerMovement pm;
+    //public Dash dash;
 
-    private bool isWallRunning = false;
+    //protected bool isWallRunning = false;
     private float wallRunTimer = 0f;
+    private float wallJumpCooldownTimer = 0f;
     private Rigidbody rb;
     private Vector3 lastWallNormal;
     private bool isGrounded;
+    private RaycastHit[] hits = new RaycastHit[1]; // Array to store the results of the raycast
     private PlayerControls playerInputActions;
 
     void Awake()
@@ -36,10 +41,16 @@ public class WallRunning : MonoBehaviour
         playerInputActions.Disable();
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        // Update the wall jump cooldown timer
+        if (wallJumpCooldownTimer > 0)
+        {
+            wallJumpCooldownTimer -= Time.deltaTime;
+        }
+        
         CheckForWall();
-        if (isWallRunning)
+        if (pm.isWallRunning)
         {
             PerformWallRun();
         }
@@ -51,16 +62,21 @@ public class WallRunning : MonoBehaviour
 
     private void CheckForWall()
     {
-        RaycastHit hit;
-
-        // Check for walls on the right and left
-        bool wallDetected = Physics.Raycast(transform.position, transform.right, out hit, wallCheckDistance, wallLayer) ||
-                            Physics.Raycast(transform.position, -transform.right, out hit, wallCheckDistance, wallLayer);
-
-        if (wallDetected)
+        if (wallJumpCooldownTimer > 0)
         {
-            // If a wall is detected, update the wall normal
-            lastWallNormal = hit.normal;
+            StopWallRun();
+            return;
+        }
+        
+        // Check for walls on the right
+        bool wallRight = Physics.RaycastNonAlloc(new Ray(transform.position, transform.right), hits, wallCheckDistance, wallLayer) > 0;
+
+        // Check for walls on the left
+        bool wallLeft = Physics.RaycastNonAlloc(new Ray(transform.position, -transform.right), hits, wallCheckDistance, wallLayer) > 0;
+
+        if (wallRight || wallLeft)
+        {
+            lastWallNormal = hits[0].normal; // Update wall normal based on the first hit
             StartWallRun();
         }
         else
@@ -71,9 +87,9 @@ public class WallRunning : MonoBehaviour
 
     private void StartWallRun()
     {
-        if (!isWallRunning)
+        if (!pm.isWallRunning)
         {
-            isWallRunning = true;
+            pm.isWallRunning = true;
             wallRunTimer = 0f;
             rb.useGravity = false; // Disable gravity while wall running
         }
@@ -81,7 +97,7 @@ public class WallRunning : MonoBehaviour
 
     private void PerformWallRun()
     {
-        isWallRunning = true;
+        // pm.isWallRunning = true;
         wallRunTimer += Time.deltaTime;
 
         // Stop wall running if the timer exceeds the max duration
@@ -115,13 +131,13 @@ public class WallRunning : MonoBehaviour
 
     private void StopWallRun()
     {
-        isWallRunning = false;
+        pm.isWallRunning = false;
         rb.useGravity = true; // Re-enable gravity
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        if (isWallRunning)
+        if (pm.isWallRunning)
         {
             WallJump();
         }
@@ -135,6 +151,9 @@ public class WallRunning : MonoBehaviour
         // Apply the jump force
         rb.velocity = new Vector3(wallJumpDirection.x * wallJumpForce, wallJumpDirection.y, wallJumpDirection.z * wallJumpForce);
 
+        // Start the wall jump cooldown timer
+        wallJumpCooldownTimer = wallJumpCooldown;
+        
         // Stop wall running after the jump
         StopWallRun();
     }

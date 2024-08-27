@@ -9,7 +9,7 @@ public class Dash : MonoBehaviour
 
     private Rigidbody rb; // Reference to the player's Rigidbody
     private PlayerControls playerInputActions; // Reference to the Input System controls
-    private bool canDash = true; // Whether the player can dash
+    public bool canDash = true; // Whether the player can dash
 
     void Awake()
     {

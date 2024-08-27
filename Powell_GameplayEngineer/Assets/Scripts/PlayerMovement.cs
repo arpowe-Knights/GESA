@@ -24,11 +24,13 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown; // The cooldown time between jumps
     public float airMultiplier; // Multiplier for movement speed when in the air
     public bool readyToJump = true; // Flag to check if the player is ready to jump
-
+    
+    
     [Header("References")]
-    public Climbing cm; // Reference to the Climbing script (if applicable)
+    //public Climbing cm; // Reference to the Climbing script (if applicable)
     public WallRunning wallRunning; // Reference to the WallRunning script
-
+    public Dash dash;
+    
     [Header("Input Actions")]
     public InputActionReference moveAction;   // Input action for movement
     public InputActionReference jumpAction;   // Input action for jumping
@@ -152,24 +154,28 @@ public class PlayerMovement : MonoBehaviour
         {
             case MovementState.walking:
                 moveSpeed = walkSpeed; // Set move speed to walk speed
+                dash.canDash = true;
                 break;
 
             case MovementState.sprinting:
                 moveSpeed = sprintSpeed; // Set move speed to sprint speed
+                dash.canDash = true;
                 break;
 
             case MovementState.wallrunning:
                 moveSpeed = wallrunSpeed; // Set move speed to wall run speed
+                dash.canDash = false; // disable dashing while wallrunning
                 rb.drag = 0; // Disable drag during wall running
                 break;
 
             case MovementState.air:
                 // Apply air drag and set move speed
                 moveSpeed = walkSpeed * airMultiplier;
+                dash.canDash = true;
                 break;
 
             case MovementState.climbing:
-                moveSpeed = cm.climbSpeed; // Set move speed to climb speed
+                //moveSpeed = cm.climbSpeed; // Set move speed to climb speed
                 break;
 
             default:
@@ -179,6 +185,7 @@ public class PlayerMovement : MonoBehaviour
         if (isWallRunning)
         {
             state = MovementState.wallrunning;
+            
         }
         else if (grounded)
         {
