@@ -35,6 +35,15 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b01a913-801e-4b08-8914-5861a317917c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -59,6 +68,28 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
                     ""action"": ""looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0123c94a-d7ae-4e0a-8917-4a9c5111db3f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f00e762d-ad13-4aef-b321-31fe26487597"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -68,6 +99,7 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_looking = m_Mouse.FindAction("looking", throwIfNotFound: true);
+        m_Mouse_Shoot = m_Mouse.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -130,11 +162,13 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_looking;
+    private readonly InputAction m_Mouse_Shoot;
     public struct MouseActions
     {
         private @MouseControls m_Wrapper;
         public MouseActions(@MouseControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @looking => m_Wrapper.m_Mouse_looking;
+        public InputAction @Shoot => m_Wrapper.m_Mouse_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -147,6 +181,9 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
             @looking.started += instance.OnLooking;
             @looking.performed += instance.OnLooking;
             @looking.canceled += instance.OnLooking;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         private void UnregisterCallbacks(IMouseActions instance)
@@ -154,6 +191,9 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
             @looking.started -= instance.OnLooking;
             @looking.performed -= instance.OnLooking;
             @looking.canceled -= instance.OnLooking;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         public void RemoveCallbacks(IMouseActions instance)
@@ -174,5 +214,6 @@ public partial class @MouseControls: IInputActionCollection2, IDisposable
     public interface IMouseActions
     {
         void OnLooking(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }

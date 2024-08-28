@@ -5,3 +5,5 @@ Preprocessor directives
 #Endif 
 
 make it so that the wall check is disabled for 1 second so as to not glue to wall
+
+make the Ai race eachother as you begin chasing them down (level 2)
