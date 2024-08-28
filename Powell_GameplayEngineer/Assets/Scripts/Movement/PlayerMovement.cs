@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown; // The cooldown time between jumps
     public float airMultiplier; // Multiplier for movement speed when in the air
     public bool readyToJump = true; // Flag to check if the player is ready to jump
-    
+    public AudioSource footsteps;
+    public AudioSource wallFootSteps;
     
     [Header("References")]
     //public Climbing cm; // Reference to the Climbing script (if applicable)
@@ -155,23 +156,31 @@ public class PlayerMovement : MonoBehaviour
             case MovementState.walking:
                 moveSpeed = walkSpeed; // Set move speed to walk speed
                 dash.canDash = true;
+                if (footsteps.isPlaying) footsteps.Stop();
+                if (wallFootSteps.isPlaying) wallFootSteps.Stop();
                 break;
 
             case MovementState.sprinting:
                 moveSpeed = sprintSpeed; // Set move speed to sprint speed
                 dash.canDash = true;
+                if (!footsteps.isPlaying) footsteps.Play();
+                if (wallFootSteps.isPlaying) wallFootSteps.Stop();
                 break;
 
             case MovementState.wallrunning:
                 moveSpeed = wallrunSpeed; // Set move speed to wall run speed
                 dash.canDash = false; // disable dashing while wallrunning
                 rb.drag = 0; // Disable drag during wall running
+                if (footsteps.isPlaying) footsteps.Stop();
+                if (!wallFootSteps.isPlaying) wallFootSteps.Play();
                 break;
 
             case MovementState.air:
                 // Apply air drag and set move speed
                 moveSpeed = walkSpeed * airMultiplier;
                 dash.canDash = true;
+                if (footsteps.isPlaying) footsteps.Stop();
+                if (wallFootSteps.isPlaying) wallFootSteps.Stop();
                 break;
 
             case MovementState.climbing:
@@ -185,10 +194,12 @@ public class PlayerMovement : MonoBehaviour
         if (isWallRunning)
         {
             state = MovementState.wallrunning;
-            
+            // footsteps.Stop();
+            // wallFootSteps.Play();
         }
         else if (grounded)
         {
+            // wallFootSteps.Stop();
             if (sprintAction.action.IsPressed())
             {
                 state = MovementState.sprinting;
@@ -196,11 +207,13 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 state = MovementState.walking;
+                // footsteps.Stop();
             }
         }
         else
         {
             state = MovementState.air;
+            // footsteps.Stop();
         }
     }
 }

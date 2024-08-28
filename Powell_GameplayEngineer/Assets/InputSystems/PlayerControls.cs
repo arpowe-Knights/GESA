@@ -71,6 +71,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Brand"",
+                    ""type"": ""Button"",
+                    ""id"": ""62432341-c7d6-40b3-94da-69878361d376"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Objectives"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce540ce4-701b-4b85-b118-2dbba3d29cd4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -282,6 +300,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8637cfa-ab23-4719-ade4-0619ff6475f6"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Brand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91bdd839-4957-4d87-874d-2e6362e68e19"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Objectives"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -301,6 +341,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_GamePlay_Look = m_GamePlay.FindAction("Look", throwIfNotFound: true);
         m_GamePlay_Sprint = m_GamePlay.FindAction("Sprint", throwIfNotFound: true);
         m_GamePlay_dash = m_GamePlay.FindAction("dash", throwIfNotFound: true);
+        m_GamePlay_Brand = m_GamePlay.FindAction("Brand", throwIfNotFound: true);
+        m_GamePlay_Objectives = m_GamePlay.FindAction("Objectives", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -367,6 +409,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_Look;
     private readonly InputAction m_GamePlay_Sprint;
     private readonly InputAction m_GamePlay_dash;
+    private readonly InputAction m_GamePlay_Brand;
+    private readonly InputAction m_GamePlay_Objectives;
     public struct GamePlayActions
     {
         private @PlayerControls m_Wrapper;
@@ -376,6 +420,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_GamePlay_Look;
         public InputAction @Sprint => m_Wrapper.m_GamePlay_Sprint;
         public InputAction @dash => m_Wrapper.m_GamePlay_dash;
+        public InputAction @Brand => m_Wrapper.m_GamePlay_Brand;
+        public InputAction @Objectives => m_Wrapper.m_GamePlay_Objectives;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -400,6 +446,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @dash.started += instance.OnDash;
             @dash.performed += instance.OnDash;
             @dash.canceled += instance.OnDash;
+            @Brand.started += instance.OnBrand;
+            @Brand.performed += instance.OnBrand;
+            @Brand.canceled += instance.OnBrand;
+            @Objectives.started += instance.OnObjectives;
+            @Objectives.performed += instance.OnObjectives;
+            @Objectives.canceled += instance.OnObjectives;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -419,6 +471,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @dash.started -= instance.OnDash;
             @dash.performed -= instance.OnDash;
             @dash.canceled -= instance.OnDash;
+            @Brand.started -= instance.OnBrand;
+            @Brand.performed -= instance.OnBrand;
+            @Brand.canceled -= instance.OnBrand;
+            @Objectives.started -= instance.OnObjectives;
+            @Objectives.performed -= instance.OnObjectives;
+            @Objectives.canceled -= instance.OnObjectives;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -452,5 +510,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnBrand(InputAction.CallbackContext context);
+        void OnObjectives(InputAction.CallbackContext context);
     }
 }

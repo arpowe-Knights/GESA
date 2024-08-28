@@ -7,13 +7,14 @@ public class Enemy : MonoBehaviour
 {
     public float enemySpeed = 5f;
     public float explosionRange = 2f;
-
+    public float enemyHealth = 4;
     public Transform playerOrentation;
     public GameObject player;
     public GameObject explosionEffect; // Assign a particle system prefab here
-
+    public Playerinfo Playerinfo;
     private bool isExploding = false;
-
+    public AudioSource explosionSound;
+    
     private void Start()
     {
         // Ensure the enemy has a SphereCollider set as a trigger
@@ -38,18 +39,30 @@ public class Enemy : MonoBehaviour
             if (ps != null)
             {
                 ps.Play();
+                explosionSound.Play();
                 Destroy(explosion, ps.main.duration); // Destroy the particle system after it finishes playing
             }
             else
             {
+                explosionSound.Play();
                 Destroy(explosion, 2f); // Fallback in case there's no ParticleSystem component
             }
         }
-
         // Deactivate the enemy
         Destroy(gameObject);
         
     }
+
+    public void enemyTakeDamage(int damageAmount)
+    {
+        enemyHealth -= damageAmount;
+        if (enemyHealth <= 0)
+        {
+            explosionSound.Play();
+            Destroy(gameObject);
+        }
+    }
+
 
     private void FixedUpdate()
     {
